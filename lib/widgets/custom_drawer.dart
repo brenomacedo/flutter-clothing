@@ -4,7 +4,6 @@ import 'package:virtual_store/widgets/drawer_tile.dart';
 class CustomDrawer extends StatelessWidget {
 
   final PageController _pageController;
-
   CustomDrawer(this._pageController);
 
   @override
