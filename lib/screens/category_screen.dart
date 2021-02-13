@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:virtual_store/data/product_data.dart';
+import 'package:virtual_store/widgets/product_tile.dart';
 
 class CategoryScreen extends StatelessWidget {
 
@@ -23,13 +25,43 @@ class CategoryScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: TabBarView(
-          children: [
-            Container(color: Colors.red),
-            Container(color: Colors.green)
-          ],
-          physics: NeverScrollableScrollPhysics(),
-        ),
+        body: FutureBuilder<QuerySnapshot>(
+          builder: (context, snapshot) {
+            if(!snapshot.hasData)
+              return Center(
+                child: CircularProgressIndicator()
+              );
+            else
+              return TabBarView(
+                children: [
+                  GridView.builder(
+                    padding: EdgeInsets.all(4.0),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 4.0,
+                      crossAxisSpacing: 4.0,
+                      childAspectRatio: 0.75,
+                    ),
+                    itemCount: snapshot.data.docs.length,
+                    itemBuilder: (context, index) {
+                      return ProductTile('grid', ProductData.fromDocument(snapshot.data.docs[index]));
+                    },
+                  ),
+                  ListView.builder(
+                    padding: EdgeInsets.all(4.0),
+                    itemCount: snapshot.data.docs.length,
+                    itemBuilder: (context, index) {
+                      return ProductTile('list', ProductData.fromDocument(snapshot.data.docs[index]));
+                    }
+                  )
+                ],
+                physics: NeverScrollableScrollPhysics(),
+              );
+            
+          },
+          future: FirebaseFirestore.instance.collection('products').doc(snapshot.id)
+            .collection('items').get()
+        )
       ),
     );
   }
