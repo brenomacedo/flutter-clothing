@@ -1,5 +1,6 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:virtual_store/data/product_data.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -15,6 +16,8 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
 
   final ProductData product;
+
+  String selectedSize;
 
   _ProductScreenState(this.product);
 
@@ -53,7 +56,42 @@ class _ProductScreenState extends State<ProductScreen> {
                 Text("R\$ ${product.price.toStringAsFixed(2)}", style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).primaryColor
-                ))
+                )),
+                SizedBox(
+                  height: 16.0
+                ),
+                Text("Tamanho", style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)),
+                SizedBox(
+                  height: 34.0,
+                  child: GridView(
+                    padding: EdgeInsets.symmetric(vertical: 4.0),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 1,
+                      mainAxisSpacing: 8.0,
+                      childAspectRatio: 0.5
+                    ),
+                    scrollDirection: Axis.horizontal,
+                    children: product.sizes.map((size) {
+                      return GestureDetector(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                            border: Border.all(color: size == selectedSize ?
+                              Colors.blue : Colors.grey[500], width: 3.0)
+                          ),
+                          width: 50,
+                          alignment: Alignment.center,
+                          child: Text(size),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            selectedSize = size;
+                          });
+                        },
+                      );
+                    }).toList(),
+                  )
+                )
               ],
             )
           )
