@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:virtual_store/screens/signup_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class SignupScreen extends StatelessWidget {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -9,26 +8,25 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Entrar"),
-        centerTitle: true,
-        actions: [
-          FlatButton(
-            child: Text("Criar conta", style: TextStyle(fontSize: 15.0, color: Colors.white)),
-            onPressed: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) {
-                  return SignupScreen();
-                }
-              ));
-            }
-          )
-        ]
+        title: Text("Criar conta"),
+        centerTitle: true
       ),
       body: Form(
         key: _formKey,
         child: ListView(
           padding: EdgeInsets.all(16),
           children: [
+            TextFormField(
+              decoration: InputDecoration(
+                hintText: "Nome completo"
+              ),
+              validator: (text) {
+                if(text.isEmpty)
+                  return "Nome inválido!";
+                return null;
+              },
+            ),
+            SizedBox(height: 16.0),
             TextFormField(
               decoration: InputDecoration(
                 hintText: "E-mail"
@@ -43,6 +41,17 @@ class LoginScreen extends StatelessWidget {
             SizedBox(height: 16.0),
             TextFormField(
               decoration: InputDecoration(
+                hintText: "Endereço",
+              ),
+              validator: (text) {
+                if(text.isEmpty)
+                  return "Endereço inválido!";
+                return null;
+              },
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              decoration: InputDecoration(
                 hintText: "Senha",
               ),
               obscureText: true,
@@ -52,21 +61,11 @@ class LoginScreen extends StatelessWidget {
                 return null;
               },
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: FlatButton(
-                child: Text("Esqueci minha senha", textAlign: TextAlign.right),
-                padding: EdgeInsets.zero,
-                onPressed: () {
-                  
-                },
-              ),
-            ),
             SizedBox(height: 16.0),
             SizedBox(
               height: 44.0,
               child: RaisedButton(
-                child: Text("Entrar", style: TextStyle(fontSize: 18.0)),
+                child: Text("Cadastrar", style: TextStyle(fontSize: 18.0)),
                 textColor: Colors.white,
                 color: Theme.of(context).primaryColor,
                 onPressed: () {
