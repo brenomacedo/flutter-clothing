@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:virtual_store/models/user_model.dart';
 import 'package:virtual_store/screens/login_screen.dart';
 import 'package:virtual_store/widgets/drawer_tile.dart';
 
@@ -45,20 +47,30 @@ class CustomDrawer extends StatelessWidget {
                     Positioned(
                       left: 0.0,
                       bottom: 0.0,
-                      child: Column(
-                        children: [
-                          Text("Olá,", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
-                          GestureDetector(
-                            child: Text("Entre ou Cadastre-se >", style: TextStyle(fontSize: 16.0,
-                              fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                                return LoginScreen();
-                              }));
-                            }
-                          )
-                        ],
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: ScopedModelDescendant<UserModel>(
+                        builder: (context, child, model) {
+                          return Column(
+                            children: [
+                              Text("Olá, ${model.isLoggedIn() ? "" : model.userData['name']}", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+                              GestureDetector(
+                                child: Text(!model.isLoggedIn() ? "Entre ou Cadastre-se >"
+                                : Text("Sair"),
+                                style: TextStyle(fontSize: 16.0,
+                                  fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
+                                onTap: () {
+                                  if(!model.isLoggedIn()) {
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                                      return LoginScreen();
+                                    }));
+                                  } else {
+                                    model.signOut();
+                                  }
+                                }
+                              )
+                            ],
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                          );
+                        }
                       )
                     )
                   ],

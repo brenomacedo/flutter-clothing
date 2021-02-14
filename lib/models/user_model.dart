@@ -14,7 +14,7 @@ class UserModel extends Model {
   
   void signUp({@required Map<String, dynamic> userData, @required String pass,
   @required VoidCallback onSuccess, @required VoidCallback onFail}) async {
-    isLoading = true;
+    isLoading = false;
     notifyListeners();
 
     _auth.createUserWithEmailAndPassword(
@@ -40,8 +40,26 @@ class UserModel extends Model {
     });
   }
 
-  void signIn() {
+  void signIn({@required String email, @required String pass,
+  @required VoidCallback onSuccess, @required VoidCallback onFail}) {
+    isLoading = true;
+    notifyListeners();
 
+    _auth.signInWithEmailAndPassword(email: email, password: pass)
+      .then((user) {
+        firebaseUser = user.user;
+
+        onSuccess();
+        isLoading = false;
+        notifyListeners();
+
+      }).catchError((error) {
+
+        onFail();
+        isLoading = false;
+        notifyListeners();
+        
+      });
   }
 
   void recoverPass() {
@@ -49,12 +67,20 @@ class UserModel extends Model {
   }
 
   bool isLoggedIn() {
-    return false;
+    return firebaseUser != null;
   }
 
   Future<Null> _saveUserData(Map<String, dynamic> userData) async {
     this.userData = userData;
     await FirebaseFirestore.instance.collection('users').doc(firebaseUser.uid).set(userData);
+  }
+
+  void signOut() async {
+    await _auth.signOut();
+
+    userData = Map();
+    firebaseUser = null;
+    notifyListeners();
   }
 
 }
