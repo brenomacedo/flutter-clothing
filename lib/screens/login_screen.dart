@@ -83,8 +83,6 @@ class LoginScreen extends StatelessWidget {
                       if(_formKey.currentState.validate()) {
                         
                       }
-
-                      model.signUp();
                     },
                   )
                 )
