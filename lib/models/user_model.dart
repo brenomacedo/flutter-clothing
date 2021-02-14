@@ -11,6 +11,13 @@ class UserModel extends Model {
   Map<String, dynamic> userData = Map();
 
   bool isLoading = false;
+
+  @override
+  void addListener(listener) {
+    super.addListener(listener);
+
+    _loadCurrentUser();
+  }
   
   void signUp({@required Map<String, dynamic> userData, @required String pass,
   @required VoidCallback onSuccess, @required VoidCallback onFail}) async {
@@ -46,8 +53,10 @@ class UserModel extends Model {
     notifyListeners();
 
     _auth.signInWithEmailAndPassword(email: email, password: pass)
-      .then((user) {
+      .then((user) async {
         firebaseUser = user.user;
+
+        await _loadCurrentUser();
 
         onSuccess();
         isLoading = false;
@@ -58,12 +67,12 @@ class UserModel extends Model {
         onFail();
         isLoading = false;
         notifyListeners();
-        
+
       });
   }
 
-  void recoverPass() {
-
+  void recoverPass(String email) {
+    _auth.sendPasswordResetEmail(email: email);
   }
 
   bool isLoggedIn() {
@@ -81,6 +90,20 @@ class UserModel extends Model {
     userData = Map();
     firebaseUser = null;
     notifyListeners();
+  }
+
+  Future<Null> _loadCurrentUser() async {
+    if(firebaseUser == null)
+      firebaseUser = _auth.currentUser;
+    if(firebaseUser != null) {
+      if(userData['name'] == null) {
+        DocumentSnapshot docUser = await FirebaseFirestore.instance.collection('users')
+          .doc(firebaseUser.uid).get();
+        userData = docUser.data();
+      }
+    }
+    notifyListeners();
+    
   }
 
 }

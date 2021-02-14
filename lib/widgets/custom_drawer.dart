@@ -51,10 +51,10 @@ class CustomDrawer extends StatelessWidget {
                         builder: (context, child, model) {
                           return Column(
                             children: [
-                              Text("Olá, ${model.isLoggedIn() ? "" : model.userData['name']}", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+                              Text("Olá, ${model.isLoggedIn() ? model.userData['name'] : ""}", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
                               GestureDetector(
                                 child: Text(!model.isLoggedIn() ? "Entre ou Cadastre-se >"
-                                : Text("Sair"),
+                                : "Sair",
                                 style: TextStyle(fontSize: 16.0,
                                   fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
                                 onTap: () {

@@ -135,7 +135,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   void _onFail() {
     _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text("Usuário criado com sucesso!"),
+      content: Text("Falha ao criar!"),
       backgroundColor: Colors.redAccent,
       duration: Duration(seconds: 2),
     ));
