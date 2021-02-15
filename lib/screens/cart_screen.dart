@@ -3,6 +3,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:virtual_store/models/cart_model.dart';
 import 'package:virtual_store/models/user_model.dart';
 import 'package:virtual_store/screens/login_screen.dart';
+import 'package:virtual_store/widgets/cart_tile.dart';
 
 class CartScreen extends StatelessWidget {
 
@@ -57,6 +58,15 @@ class CartScreen extends StatelessWidget {
             return Center(child: Text("Nenhum produto no carrinho", style: TextStyle(fontSize: 20,
             fontWeight: FontWeight.bold), textAlign: TextAlign.center));
 
+          return ListView(
+            children: [
+              Column(
+                children: model.products.map((item) {
+                  return CartTile(item);
+                }).toList()
+              )
+            ],
+          );
 
         },
       ),
