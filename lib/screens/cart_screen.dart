@@ -4,6 +4,7 @@ import 'package:virtual_store/models/cart_model.dart';
 import 'package:virtual_store/models/user_model.dart';
 import 'package:virtual_store/screens/login_screen.dart';
 import 'package:virtual_store/widgets/cart_tile.dart';
+import 'package:virtual_store/widgets/discout_cart.dart';
 
 class CartScreen extends StatelessWidget {
 
@@ -64,7 +65,8 @@ class CartScreen extends StatelessWidget {
                 children: model.products.map((item) {
                   return CartTile(item);
                 }).toList()
-              )
+              ),
+              DiscountCart()
             ],
           );
 
