@@ -57,7 +57,7 @@ class CartScreen extends StatelessWidget {
               ),
             );
           
-          if(model.products == null || model.products.length == 10)
+          if(model.products == null || model.products.length == 0)
             return Center(child: Text("Nenhum produto no carrinho", style: TextStyle(fontSize: 20,
             fontWeight: FontWeight.bold), textAlign: TextAlign.center));
 
@@ -70,7 +70,12 @@ class CartScreen extends StatelessWidget {
               ),
               DiscountCart(),
               ShipCard(),
-              CartPrice(() {})
+              CartPrice(() async {
+                String orderId = await model.finishOrder();
+                if(orderId != null) {
+                  print(orderId);
+                }
+              })
             ],
           );
 
