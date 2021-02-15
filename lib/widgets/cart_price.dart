@@ -16,6 +16,11 @@ class CartPrice extends StatelessWidget {
         padding: EdgeInsets.all(16.0),
         child: ScopedModelDescendant<CartModel>(
           builder: (context, child, model) {
+
+            double price = model.getProductsPrice();
+            double discount = model.getDiscount();
+            double ship = model.getShipPrice();
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -26,7 +31,7 @@ class CartPrice extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Subtotal"),
-                    Text("R\$ 0.00")
+                    Text("R\$ ${price.toStringAsFixed(2)}")
                   ],
                 ),
                 Divider(),
@@ -34,7 +39,7 @@ class CartPrice extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Discount"),
-                    Text("R\$ 0.00")
+                    Text("R\$ ${discount.toStringAsFixed(2)}")
                   ],
                 ),
                 Divider(),
@@ -42,7 +47,7 @@ class CartPrice extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Entrega"),
-                    Text("R\$ 0.00")
+                    Text("R\$ ${ship.toStringAsFixed(2)}")
                   ],
                 ),
                 SizedBox(height: 12.0),
@@ -51,7 +56,7 @@ class CartPrice extends StatelessWidget {
                   children: [
                     Text("Total", style: TextStyle(color: Theme.of(context).primaryColor,
                     fontSize: 16.0, fontWeight: FontWeight.w500)),
-                    Text("R\$ 0.00")
+                    Text("R\$ ${(price + ship - discount).toStringAsFixed(2)}")
                   ],
                 ),
                 SizedBox(height: 12.0),
