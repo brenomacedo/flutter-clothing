@@ -25,7 +25,7 @@ class UserModel extends Model {
   
   void signUp({@required Map<String, dynamic> userData, @required String pass,
   @required VoidCallback onSuccess, @required VoidCallback onFail}) async {
-    isLoading = false;
+    isLoading = true;
     notifyListeners();
 
     _auth.createUserWithEmailAndPassword(
